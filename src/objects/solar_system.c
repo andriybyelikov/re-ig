@@ -117,31 +117,31 @@ void solar_system__init(solar_system_t ref)
     
 
     // Sun
-    celestial_object__init(&a->objects[0], 695510.0f, 1.0f, 24.47f, 0.0f, 0.0f, 0.0f, "../planets/sun.jpg");
+    celestial_object__init(&a->objects[0], 695510.0f, 1.0f, 24.47f, 0.0f, 0.0f, 0.0f, "../data/textures/sun.jpg");
 
     // Mercury
-    celestial_object__init(&a->objects[1], 2439.7f, 57.9e6f, 58.65f, 87.97f, 0.0f, 3.38f, "../planets/mercury.jpg");
+    celestial_object__init(&a->objects[1], 2439.7f, 57.9e6f, 58.65f, 87.97f, 0.0f, 3.38f, "../data/textures/mercury.jpg");
 
     // Venus
-    celestial_object__init(&a->objects[2], 6051.8f, 108.2e6f, -243.02f, 224.70f, 178.0f, 3.86f, "../planets/venus.jpg");
+    celestial_object__init(&a->objects[2], 6051.8f, 108.2e6f, -243.02f, 224.70f, 178.0f, 3.86f, "../data/textures/venus.jpg");
 
     // Earth
-    celestial_object__init(&a->objects[3], 6371.0f, 149.6e6f, 1.00f, 365.26f, 23.4f, 7.155f, "../planets/earth.jpg");
+    celestial_object__init(&a->objects[3], 6371.0f, 149.6e6f, 1.00f, 365.26f, 23.4f, 7.155f, "../data/textures/earth.jpg");
 
     // Mars
-    celestial_object__init(&a->objects[4], 3389.5f, 227.9e6f, 1.02f, 686.98f, 25.0f, 5.65f, "../planets/mars.jpg");
+    celestial_object__init(&a->objects[4], 3389.5f, 227.9e6f, 1.02f, 686.98f, 25.0f, 5.65f, "../data/textures/mars.jpg");
 
     // Jupiter
-    celestial_object__init(&a->objects[5], 69911.0f,  778.5e6f, 0.41f,  4328.90f, 3.08f, 6.09f, "../planets/jupiter.jpg");
+    celestial_object__init(&a->objects[5], 69911.0f,  778.5e6f, 0.41f,  4328.90f, 3.08f, 6.09f, "../data/textures/jupiter.jpg");
     
     // Saturn
-    celestial_object__init(&a->objects[6], 58232.0f, 1434.0e6f, 0.44f, 10752.90f, 26.7f, 5.51f, "../planets/saturn.jpg");
+    celestial_object__init(&a->objects[6], 58232.0f, 1434.0e6f, 0.44f, 10752.90f, 26.7f, 5.51f, "../data/textures/saturn.jpg");
 
     // Uranus
-    celestial_object__init(&a->objects[7], 25362.0f, 2871.0e6f, -0.72f, 30685.00f, 97.9f, 6.48f, "../planets/uranus.jpg");
+    celestial_object__init(&a->objects[7], 25362.0f, 2871.0e6f, -0.72f, 30685.00f, 97.9f, 6.48f, "../data/textures/uranus.jpg");
 
     // Neptune
-    celestial_object__init(&a->objects[8], 24622.0f, 4495.0e6f,  0.67f, 60190.00f, 29.6f, 6.43f, "../planets/neptune.jpg");
+    celestial_object__init(&a->objects[8], 24622.0f, 4495.0e6f,  0.67f, 60190.00f, 29.6f, 6.43f, "../data/textures/neptune.jpg");
 }
 
 void solar_system__proc(solar_system_t ref)

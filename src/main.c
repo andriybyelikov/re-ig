@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    GLFWwindow *window = glfwCreateWindow(960, 540, "Re:IG", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(960, 540, "re-ig", NULL, NULL);
     if (!window) {
         fprintf(stderr, "Failed to create GLFW window.\n");
         glfwTerminate();
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
     stbi_set_flip_vertically_on_load(1);
 
     int width, height, channels;
-    unsigned char *data = stbi_load("../atlas.png", &width, &height, &channels,
+    unsigned char *data = stbi_load("../data/textures/tiles.png", &width, &height, &channels,
         STBI_rgb);
     if (data != NULL) {
         fprintf(stderr, "tex %d %d\n", width, height);
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
         { 2.0f, 0.0f, 8.5f, 0.0f },
         { 1.5f, 0.0f, 9.5f, 0.0f },
         { 1.1f, 0.0f, 10.5f, 0.0f },
-        { 1.4f, 0.0f, 8.9f, 25.0f }
+        { 1.4f, 1.0f, 8.9f, 25.0f }
     };
     for (int i = 0; i < num_crates; i++) {
         crates[i] = new_crate();
@@ -165,10 +165,10 @@ int main(int argc, char *argv[])
     //
 
     sound_init();
-    sound_load_bgm(0, "../shadows.opus");
-    sound_load_bge(0, "../rev_w.opus");
-    sound_load_bge(1, "../rev_s.opus");
-    sound_load_sfx(0, "../fall.opus");
+    sound_load_bgm(0, "../data/audio/bgm/shadows.opus");
+    sound_load_bge(0, "../data/audio/bgs/rev_w.opus");
+    sound_load_bge(1, "../data/audio/bgs/rev_s.opus");
+    sound_load_sfx(0, "../data/audio/se/fall.opus");
     sound_play_bgm(0);
 
     double ptime = glfwGetTime();
