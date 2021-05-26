@@ -6,6 +6,8 @@
 #define GLFW_INCLUDE_GLU
 #include <GLFW/glfw3.h>
 
+#include <libgameaudio.h>
+
 #include "my_stb.h"
 
 #include "objects/camera.h"
@@ -13,8 +15,6 @@
 #include "objects/ceil_light.h"
 #include "objects/crate.h"
 #include "objects/solar_system.h"
-
-#include "sound.h"
 
 #include "map_data.h"
 
@@ -134,6 +134,7 @@ int main(int argc, char *argv[])
     int rev_playing = 0;
     elevator_t elv = new_elevator();
     elevator__init(elv);
+    float elv_prev_y = *elevator__y(elv);
     //
     solar_system_t solar = new_solar_system();
     solar_system__init(solar);
@@ -164,18 +165,21 @@ int main(int argc, char *argv[])
     }
     //
 
-    sound_init();
-    sound_load_bgm(0, "../data/audio/bgm/shadows.opus");
-    sound_load_bge(0, "../data/audio/bgs/rev_w.opus");
-    sound_load_bge(1, "../data/audio/bgs/rev_s.opus");
-    sound_load_sfx(0, "../data/audio/se/fall.opus");
-    sound_play_bgm(0);
+
+    lgaInit(1, 2, 1, 1, 1, 2);
+    lgaLoad(LGA_BGM, LGA_OPUS, "../data/audio/bgm/shadows.opus");
+    lgaLoad(LGA_BGS, LGA_OPUS, "../data/audio/bgs/rev_w.opus");
+    lgaLoad(LGA_BGS, LGA_OPUS, "../data/audio/bgs/rev_s.opus");
+    lgaLoad(LGA_ME, LGA_OPUS, "../data/audio/me/chime.opus");
+    lgaLoad(LGA_SE, LGA_OPUS, "../data/audio/se/fall.opus");
+    lgaPlay(LGA_BGM, 0, 0);
 
     double ptime = glfwGetTime();
     while (!glfwWindowShouldClose(window)) {
         double deltatime = glfwGetTime() - ptime;
         ptime = glfwGetTime();
         solar_system__proc(solar);
+        elv_prev_y = *elevator__y(elv);
         elevator__proc(elv, deltatime);
         //
         /* on elevator */
@@ -188,6 +192,9 @@ int main(int argc, char *argv[])
                 && 3.0f <= cam_z && cam_z < 4.0f
                 && fabsf(cam_y - *elevator__y(elv)) <= 0.2f) {
                 *vec3f__y(*camera__pos(cam)) = *elevator__y(elv) + 0.1f;
+                if (*elevator__y(elv) == 2.0f && *elevator__y(elv) > elv_prev_y) {
+                    lgaPlay(LGA_ME, 0, 0);
+                }
             } else if (cam_y > 0.1f && (tile == 0 || tile == 3)) {
                 //fprintf(stderr, "x = %d, z = %d, tile = %d\n",
                 //    (int)cam_x, (int)cam_z, tile);
@@ -197,7 +204,7 @@ int main(int argc, char *argv[])
                 *vec3f__y(*camera__pos(cam)) = next_y; 
                 if (*vec3f__y(*camera__pos(cam)) < 0.1f) {
                     *vec3f__y(*camera__pos(cam)) = 0.1f;
-                    sound_play_sfx(0);
+                    lgaPlay(LGA_SE, 0, 0);
                 }
             }
         }
@@ -245,12 +252,12 @@ int main(int argc, char *argv[])
                 *vec3f__x(*camera__pos(cam)) += cosf(*camera__azimuthal_angle(cam)) * 0.05f;
                 *vec3f__z(*camera__pos(cam)) += sinf(*camera__azimuthal_angle(cam)) * 0.05f;
                 if (!rev_playing) {
-                    sound_play_bge(0);
+                    lgaPlay(LGA_BGS, 0, 0);
                     rev_playing = 1;
                 }
             } else {
                 if (rev_playing) {
-                    sound_stop_bge();
+                    lgaStop(LGA_E_QT, LGA_BGS, 0);
                     rev_playing = 0;
                 }
             }
@@ -284,24 +291,24 @@ int main(int argc, char *argv[])
                 *vec3f__x(*camera__pos(cam)) -= cosf(*camera__azimuthal_angle(cam)) * 0.05f;
                 *vec3f__z(*camera__pos(cam)) -= sinf(*camera__azimuthal_angle(cam)) * 0.05f;
                 if (!rev_playing) {
-                    sound_play_bge(0);
+                    lgaPlay(LGA_BGS, 0, 0);
                     rev_playing = 1;
                 }
             } else {
                 if (rev_playing) {
-                    sound_stop_bge();
+                    lgaStop(LGA_E_QT, LGA_BGS, 0);
                     rev_playing = 0;
                 }
             }
         } else {
             if (rev_playing) {
-                sound_stop_bge();
+                lgaStop(LGA_E_QT, LGA_BGS, 0);
                 rev_playing = 0;
             }
         }
 
         //
-        sound_proc();
+        lgaProc();
         //
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -592,6 +599,7 @@ int main(int argc, char *argv[])
         glfwPollEvents();
     }
 
+    lgaTerminate();
     glfwTerminate();
     exit(EXIT_SUCCESS);
 }
